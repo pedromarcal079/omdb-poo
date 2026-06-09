@@ -27,7 +27,7 @@ class MovieModel {
     return MovieModel(
       title: json['Title'] ?? 'Sem título', 
       year: json['Year'] ?? 'Ano desconhecido', 
-      imdbId: json['imdbId'] ?? '', 
+      imdbId: json['imdbID'] ?? '', 
       type: json['Type'] ?? 'Desconhedido', 
       poster: json['Poster'] == 'N/A'
         ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1920px-No-Image-Placeholder.svg.png'

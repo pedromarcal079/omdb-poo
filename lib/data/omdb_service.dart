@@ -35,22 +35,30 @@ class OmdbService {
   }
 
   Future<MovieDetailModel?> fetchMovieDetail(String imdbId) async {
-    final uri = Uri.parse('$_baseUrl?i=$imdbId&plot=full&apikey=$_apiKey');
+  final uri = Uri.parse('$_baseUrl?i=$imdbId&plot=full&apikey=$_apiKey');
 
-    try {
-      final response = await http.get(uri);
+  print("URL Chamada: $uri");
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        if (data['Response'] == 'True') {
-          return MovieDetailModel.fromJson(data);
-        }
+  try {
+    final response = await http.get(uri);
+
+    print("Status Code da API: ${response.statusCode}");
+    print("Corpo da Resposta API: ${response.body}");
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      
+      if (data['Response'] == 'True') {
+        return MovieDetailModel.fromJson(data);
+      } else {
+        print("OMDb retornou falso erro: ${data['Error']}");
       }
-      return null;
-    } catch (e) {
-      // ignore: avoid_print
-      print("Erro ao buscar detalhes do filme: $e");
-      return null;
     }
+    return null;
+  } catch (e, stackTrace) {
+    print("ERRO CRÍTICO NO SERVICE: $e");
+    print("STACK TRACE: $stackTrace");
+    return null;
   }
+}
 }
