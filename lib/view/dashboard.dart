@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/movie_controller.dart';
 import 'search_view.dart';
+import 'favorites_page.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -12,7 +13,7 @@ class Dashboard extends StatelessWidget {
 
     final List<Widget> screens = [
       const SearchView(),
-      const Center(child: Text("Tela de Favoritos ja ja"),)
+      const FavoritesPage()
     ];
 
     return Obx(() => Scaffold(
