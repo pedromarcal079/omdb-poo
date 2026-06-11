@@ -40,15 +40,45 @@ class SearchView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
+          SizedBox(
+          height: 40,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.genresList.length,
+            itemBuilder: (context, index) {
+              final genre = controller.genresList[index];
+              return Obx(() {
+                final isSelected = controller.selectedGenre.value == genre;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: FilterChip(
+                    label: Text(genre),
+                    selected: isSelected,
+                    selectedColor: Colors.indigo,
+                    labelStyle: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black87,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                    onSelected: (bool selected) {
+                      controller.changeGenre(genre);
+                    },
+                  ),
+                );
+              });
+            },
+          ),
+        ),
+
+          const SizedBox(height: 16),
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              if (controller.movies.isEmpty) {
+              if (controller.filteredMovies.isEmpty) {
                 return const Center(
-                  child: Text("Nenhum Filme encontrado. Digite algo acima!"),
+                  child: Text('Nenhum filme corresponde ao filtro selecionado.'),
                 );
               }
 
@@ -59,9 +89,9 @@ class SearchView extends StatelessWidget {
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                   ),
-                itemCount: controller.movies.length,
+                itemCount: controller.filteredMovies.length,
                 itemBuilder: (context, index) {
-                  final movie = controller.movies[index];
+                  final movie = controller.filteredMovies[index];
 
                   return GestureDetector(
                     onTap: () {

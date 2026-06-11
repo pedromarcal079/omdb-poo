@@ -4,24 +4,23 @@ class MovieModel {
   final String _imdbId;
   final String _type;
   final String _poster;
+  List<String> genres;
 
   MovieModel({
-    required String title,
-    required String year,
-    required String imdbId,
-    required String type,
-    required String poster,
-  })  : _title = title,
-        _year = year,
-        _imdbId = imdbId,
-        _type = type,
-        _poster = poster;
+    required this._title,
+    required this._year,
+    required this._imdbId,
+    required this._type,
+    required this._poster,
+    required this.genres,
+  });
 
   String get title => _title;
   String get year => _year;
   String get imdbId => _imdbId;
   String get type => _type;
   String get poster => _poster;
+  // List<String> get genres => genres;
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
     return MovieModel(
@@ -32,6 +31,7 @@ class MovieModel {
       poster: json['Poster'] == 'N/A'
         ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1920px-No-Image-Placeholder.svg.png'
         : json['Poster'],
+      genres: ['Todos'],
     );
   }
 

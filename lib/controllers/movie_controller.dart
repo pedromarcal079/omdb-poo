@@ -13,14 +13,46 @@ class MovieController extends GetxController {
   var currentMovieDetail = Rxn<MovieDetailModel>();
   var isLoadingDetail = false.obs;
 
+  var selectedGenre = 'Todos'.obs;
+  final List<String> genresList = ['Todos', 'Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi','Animation','Adventure', 'Musical', 'Sport'];
+
+  List<MovieModel> get filteredMovies {
+    if (selectedGenre.value == 'Todos') {
+      return movies;
+    }
+    return movies.where((movie) => movie.genres.contains(selectedGenre.value)).toList();
+  }
+
   void fetchMovies(String query) async {
+    if (query.trim().isEmpty) {
+    movies.clear();
+    return;
+  }
+
     try {
       isLoading.value = true;
       final result = await _omdbService.searchMovies(query);
       movies.assignAll(result);
+
+      _loadGenresForLoadedMovies();
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void _loadGenresForLoadedMovies() async {
+    final List<MovieModel> currentList = List.from(movies);
+
+    for (var movie in currentList) {
+      final detail = await _omdbService.fetchMovieDetail(movie.imdbId);
+
+      if (detail != null && detail.genre != 'N/A') {
+        List<String> realGenres = detail.genre.split(', ').toList();
+        movie.genres.addAll(realGenres);
+      }
+    }
+
+    movies.refresh();
   }
 
   void toggleFavorite(MovieModel movie) {
@@ -50,5 +82,9 @@ class MovieController extends GetxController {
   var currentTabIndex = 0.obs; // Controla o índice da barra inferior (0 = Busca, 1 = Favoritos)
   void changeTab(int index) {
     currentTabIndex.value = index;
+  }
+
+  void changeGenre(String genre) {
+    selectedGenre.value = genre;
   }
 }
