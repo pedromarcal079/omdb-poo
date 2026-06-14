@@ -3,10 +3,6 @@ import 'package:get/get.dart';
 import 'package:miniprojeto/view/detail_page.dart';
 import '../controllers/movie_controller.dart';
 
-// TODO:
-// fix pressing the movie card
-// responsiveness ?
-
 class SearchView extends StatelessWidget {
   const SearchView({super.key});
 
@@ -15,28 +11,52 @@ class SearchView extends StatelessWidget {
     final MovieController controller = Get.find<MovieController>();
     final TextEditingController searchController = TextEditingController();
 
+    void launchSearch() {
+      FocusScope.of(context).unfocus();
+      controller.changeGenre('Todos');
+      controller.fetchMovies(searchController.text);
+    }
+
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
         children: [
-          TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: 'Nome do filme...',
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: IconButton(
-                onPressed: () {
-                  searchController.clear();
-                  controller.fetchMovies('');
-                }, 
-                icon: const Icon(Icons.clear)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Digite o nome do filme...',
+                    prefixIcon: const Icon(Icons.movie_outlined),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        searchController.clear();
+                        controller.fetchMovies('');
+                      },
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onSubmitted: (_) => launchSearch(), 
+                ),
               ),
-            ),
-            onChanged: (text) {
-              controller.fetchMovies(text);
-            },
+              const SizedBox(width: 8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.all(16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: launchSearch,
+                child: const Icon(Icons.search),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
 
@@ -69,7 +89,6 @@ class SearchView extends StatelessWidget {
           ),
         ),
 
-          const SizedBox(height: 16),
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value) {
