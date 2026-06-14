@@ -24,6 +24,7 @@ class StatsPage extends StatelessWidget {
         }
 
         final totalGenresCount = stats.values.fold(0, (sum,item) => sum + item);
+        final totalMoviesCount = movieController.favoriteMovies.length;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +35,7 @@ class StatsPage extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              'Você tem $totalGenresCount filmes favoritos em ${stats.length} gêneros diferentes.',
+              'Você tem $totalMoviesCount filmes favoritos em $totalGenresCount gêneros diferentes.',
               style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 20),
@@ -44,7 +45,7 @@ class StatsPage extends StatelessWidget {
                 itemBuilder: (context,index){
                   final String genre = stats.keys.elementAt(index);
                   final int count = stats.values.elementAt(index);
-                  final double percentage = totalGenresCount > 0 ? (count / totalGenresCount) * 100 : 0;
+                  final double percentage = totalMoviesCount > 0 ? (count / totalMoviesCount) * 100 : 0;
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
