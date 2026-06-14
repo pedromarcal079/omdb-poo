@@ -16,6 +16,21 @@ class MovieController extends GetxController {
   var selectedGenre = 'Todos'.obs;
   final List<String> genresList = ['Todos', 'Action', 'Comedy', 'Drama', 'Horror', 'Sci-Fi','Animation','Adventure', 'Musical', 'Sport'];
 
+  Map<String, int> get genreStatistics {
+    final Map<String, int> countMap = {};
+
+    for (var movie in favoriteMovies) {
+      for (var genre in movie.genres) {
+        if (genre == 'Todos') continue; // Ignorar o gênero "Todos"
+        countMap[genre] = (countMap[genre] ?? 0) + 1;
+      }
+    }
+
+    final sortedEntries = countMap.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value)); // Ordenar por contagem decrescente
+    return Map.fromEntries(sortedEntries);
+  } 
+
   List<MovieModel> get filteredMovies {
     if (selectedGenre.value == 'Todos') {
       return movies;

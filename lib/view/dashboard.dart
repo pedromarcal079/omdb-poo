@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/movie_controller.dart';
 import 'search_view.dart';
 import 'favorites_page.dart';
+import 'stats_page.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -13,14 +14,17 @@ class Dashboard extends StatelessWidget {
 
     final List<Widget> screens = [
       const SearchView(),
-      const FavoritesPage()
+      const FavoritesPage(),
+      const StatsPage(),
     ];
 
     return Obx(() => Scaffold(
       appBar: AppBar(
         title: Text(controller.currentTabIndex.value == 0
           ? 'Catalogo OMDb'
-          : 'Favoritos'),
+          : controller.currentTabIndex.value == 1 
+          ? 'Favoritos'
+          : 'Estatísticas'),
         centerTitle: true,
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
@@ -41,6 +45,11 @@ class Dashboard extends StatelessWidget {
             icon: Icon(Icons.favorite_border),
             selectedIcon: Icon(Icons.favorite),
             label: 'Favoritos'
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined), 
+            selectedIcon: Icon(Icons.bar_chart),
+            label: 'Stats',
           ),
         ],
       ),
