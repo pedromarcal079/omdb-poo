@@ -35,7 +35,7 @@ class StatsPage extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              'Você tem $totalMoviesCount filmes favoritos em $totalGenresCount gêneros diferentes.',
+              'Você tem $totalMoviesCount filmes favoritos em ${stats.length} gêneros diferentes.',
               style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 20),
